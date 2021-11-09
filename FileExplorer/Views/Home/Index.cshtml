@@ -1,0 +1,96 @@
+﻿@model AllModel
+
+@using FileExplorer.Controllers
+@{
+    ViewData["Title"] = "File explorer";
+
+}
+
+<div class="text-center">
+    <div class="fullPath">
+        @if (Model.FullPath is not null)
+        {
+            @foreach (var item in Model.FullPath)
+            {
+                @Html.RouteLink(item.Name, new {controller = "Home", action = "Index", fullPath = item.Path})
+                <p> \ </p>
+            }
+        }
+    </div>
+    <div class="path-container">
+        <div class="path-container-info">
+            <p class="path-container-name">Directories</p>
+            <div class="path-container-links">
+                <table class="table">
+                    <thead>
+                    @if (Model.Directories.All(x => x.IsFile))
+                    {
+                        <p>None</p>
+                    }
+                    else
+                    {
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Directories[0].Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Directories[0].Size)
+                            </th>
+                            <th></th>
+                        </tr>
+                    }
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Directories.OrderByDescending(x => x.Size).Where(x => !x.IsFile))
+                    {
+                        <tr>
+                            <td>
+                                @Html.RouteLink(item.Name, new {controller = "Home", action = "Index", fullPath = item.Path}, new {@class = "path-container-link"})
+                            </td>
+                            <td>
+                                @item.Size bytes
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="path-container-info">
+            <p class="path-container-name">Files</p>
+            <table class="table">
+                <thead>
+                @if (!Model.Directories.Any(x => x.IsFile))
+                {
+                    <p>None</p>
+                }
+                else
+                {
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Directories[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Directories[0].Size)
+                        </th>
+                        <th></th>
+                    </tr>
+                }
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Directories.OrderByDescending(x => x.Size).Where(x => x.IsFile))
+                {
+                    <tr>
+                        <td>
+                            @Html.RouteLink(item.Name, new {controller = "Home", action = "Index", fullPath = item.Path}, new {@class = "path-container-link"})
+                        </td>
+                        <td>
+                            @item.Size bytes
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
