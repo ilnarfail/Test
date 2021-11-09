@@ -22,21 +22,16 @@ namespace FileExplorer.Controllers
             AllModel data = null;
             if (fullPath is null)
             {
-                data = new AllModel()
-                {
-                    Directories = GetDrivers()
-                };
+                data = new AllModel(){ Directories = GetDrivers() };
             }
             else
             {
                 var paths = fullPath.Split("\\").Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
                 data = new AllModel()
                 {
                     Directories = GetItems(fullPath),
                     FullPath = new PathDto[paths.Length]
                 };
-
                 var iterator = 0;
                 foreach (var item in paths)
                 {
@@ -50,7 +45,6 @@ namespace FileExplorer.Controllers
                     iterator++;
                 }
             }
-
             return View(data);
         }
 
@@ -70,8 +64,7 @@ namespace FileExplorer.Controllers
                     Size = x.TotalSize
                 })
                 .ToArray();
-
-
+        
         private DirectoryModel[] GetItems(string path)
         {
             var files = new DirectoryInfo(@path)
