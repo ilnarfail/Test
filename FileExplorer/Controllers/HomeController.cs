@@ -35,12 +35,10 @@ namespace FileExplorer.Controllers
                 var iterator = 0;
                 foreach (var item in paths)
                 {
-                    var index = fullPath.IndexOf(item, StringComparison.Ordinal);
-                    var path = fullPath[..index];
                     data.FullPath[iterator] = new PathDto()
                     {
                         Name = item,
-                        Path = path
+                        Path = iterator == 0 ? item : data.FullPath[iterator - 1].Path + "\\" + item
                     };
                     iterator++;
                 }
@@ -80,7 +78,7 @@ namespace FileExplorer.Controllers
                     Name = x.Name,
                     Path = x.FullName,
                     IsFile = false,
-                    Size = GetDirectorySize(x)
+                    // Size = GetDirectorySize(x)
                 });
 
             return files.Concat(directories).ToArray();
