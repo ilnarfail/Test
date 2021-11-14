@@ -78,7 +78,7 @@ namespace FileExplorer.Controllers
                     Name = x.Name,
                     Path = x.FullName,
                     IsFile = false,
-                    // Size = GetDirectorySize(x)
+                    Size = GetDirectorySize(x)
                 });
 
             return files.Concat(directories).ToArray();
